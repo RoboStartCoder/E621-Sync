@@ -1,6 +1,13 @@
 # E621-Sync
 Simple script for synchronization with e621.net
 
+## Navigation 
+- [Features](#features)
+- [Config setup](#config-setup)
+- [How to add pool](#how-to-add-pool)
+- [TODO](#todo)
+- [Disclaimer](#disclaimer)
+
 ## Features
 - Authorization through username and [API key](https://e621.net/api_keys)
 - Synchronization images from local folder and favorites
@@ -24,7 +31,7 @@ Simple script for synchronization with e621.net
 }
 ```
 
-## How to add local pool
+## How to add pool
 - Create empty subdirectory in your root directory
 - Make file `POOL_ID.pool` in this directory (Example: `40387.pool`)
 - Wait for/Start synchronization
@@ -32,3 +39,6 @@ Simple script for synchronization with e621.net
 
 ## TODO
 - [ ] Video synchronization
+
+### Disclaimer
+*This project and its creator are not associated with Dragon Fruit Ventures LLC.*

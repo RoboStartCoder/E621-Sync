@@ -286,7 +286,7 @@ def sync():
 def do_sync():
     try:
         sync()
-    except Exception as e:
+    except Exception:
         pass
 
 if __name__ == '__main__':

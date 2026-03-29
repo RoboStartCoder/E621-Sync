@@ -5,6 +5,8 @@ import time
 
 import requests
 from pathlib import Path
+
+import schedule
 from requests.auth import HTTPBasicAuth
 
 ROOT: Path
@@ -15,14 +17,40 @@ AUTH: HTTPBasicAuth
 
 headers = {'user-agent': 'hydrusBatchSauce/corposim'}
 extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.webp'}
-
+config_template = {
+  "authentication": {
+    "username": "",
+    "api_key": ""
+  },
+  "auto_delete": {
+    "blacklisted": True,
+    "duplicates": True
+  },
+  "root_dir": "",
+  "sync_timer": 3600
+}
 
 def load_config():
     global AUTH, TIMER, DELETE_BLACKLISTED, DELETE_DUPLICATES, ROOT
+    try:
+        with open(f"config.json", "x", encoding="utf-8") as f:
+            json.dump({}, f, indent=4, ensure_ascii=False)
+    except FileExistsError:
+        pass
     with open(f'config.json', 'r', encoding='utf-8') as f:
         config = json.load(f)
         ROOT = Path(config["root_dir"])
+
+        if not ROOT.exists() or not ROOT.is_dir():
+            print("[ROOT Directory failed] Check ROOT_DIR path in config.json")
+            exit(1)
+
         AUTH = HTTPBasicAuth(config["authentication"]["username"], config["authentication"]["api_key"])
+
+        auth_test = requests.get("https://e621.net/users/me.json", headers=headers, auth=AUTH)
+        if auth_test.status_code != 200 or auth_test.json()["name"] == "Anonymous":
+            print("[Authentication failed] Check API_KEY and USERNAME in config.json")
+            exit(1)
 
         DELETE_BLACKLISTED = config["auto_delete"]["blacklisted"]
         DELETE_DUPLICATES = config["auto_delete"]["duplicates"]
@@ -178,11 +206,11 @@ def sync_pools(directory: Path) -> list[int]:
 
 
 def sync():
-    print("Synchronization started...")
-    print("Syncing pools...\n")
+    print("[INFO] Synchronization started...")
+    print("[INFO] Syncing pools...\n")
     ids_in_pools = sync_pools(ROOT)
-    print("Pools done!\n")
-    print("Prepare to sync ungrouped posts\n")
+    print("[INFO] Pools done!\n")
+    print("[INFO] Prepare to sync ungrouped posts\n")
 
     local, bad = load_all_local(ROOT)
     remote = load_all_remote()
@@ -197,7 +225,7 @@ def sync():
 
     not_found = []
 
-    print("Syncing ungrouped posts...\n")
+    print("[INFO] Syncing ungrouped posts...\n")
 
     local_deleted = find_local_deleted(local, manifest)
     print("Local Deleted:", *local_deleted, sep='\n- ', end='\n\n')
@@ -251,10 +279,22 @@ def sync():
             print(f"[Local fail] {id_}")
         time.sleep(0.5)
 
-    print("Ungrouped posts done!\n")
-    print("Sync complete!")
+    print("[INFO] Ungrouped posts done!\n")
+    print("[INFO] Sync complete!")
 
+
+def do_sync():
+    try:
+        sync()
+    except Exception as e:
+        pass
 
 if __name__ == '__main__':
+    print("[INFO] Preparing, please wait...")
     load_config()
-    sync()
+    schedule.every(TIMER).seconds.do(do_sync)
+    do_sync()
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)

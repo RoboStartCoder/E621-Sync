@@ -273,8 +273,8 @@ def sync():
             continue
         res = add_local(id_, ROOT)
         if res is not None:
-            print(f"[Local add] {id_}.png ({id_})")
-            add_manifest(manifest, {f"{id_}.png": id_}, ROOT)
+            print(f"[Local add] {res.name} ({id_})")
+            add_manifest(manifest, {f"{res.name}": id_}, ROOT)
         else:
             print(f"[Local fail] {id_}")
         time.sleep(0.5)

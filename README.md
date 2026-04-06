@@ -9,6 +9,13 @@ Simple script for synchronization with e621.net
 - [TODO](#todo)
 - [Disclaimer](#disclaimer)
 
+## Features
+- Authorization through username and [API key](https://e621.net/api_keys)
+- Synchronization images from local folder and favorites
+- Pools subdirectories and synchronization with content from pools
+- Scheduled synchronization
+- Auto-delete [blacklisted](https://e621.net/users/settings?tab=blacklist) and duplicates
+
 ## Usage
 ```bash
 python3 main.py
@@ -17,13 +24,6 @@ System requirements:
 - Python: 3.6+
 - OS: Any
 - Always online machine (like Server)
-
-## Features
-- Authorization through username and [API key](https://e621.net/api_keys)
-- Synchronization images from local folder and favorites
-- Pools subdirectories and synchronization with content from pools
-- Scheduled synchronization
-- Auto-delete [blacklisted](https://e621.net/users/settings?tab=blacklist) and duplicates
 
 ## Config setup
 ```json

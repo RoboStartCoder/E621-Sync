@@ -3,10 +3,20 @@ Simple script for synchronization with e621.net
 
 ## Navigation 
 - [Features](#features)
+- [Usage](#usage)
 - [Config setup](#config-setup)
 - [How to add pool](#how-to-add-pool)
 - [TODO](#todo)
 - [Disclaimer](#disclaimer)
+
+## Usage
+```bash
+python3 main.py
+```
+System requirements:
+- Python: 3.6+
+- OS: Any
+- Always online machine (like Server)
 
 ## Features
 - Authorization through username and [API key](https://e621.net/api_keys)

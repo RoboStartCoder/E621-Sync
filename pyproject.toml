@@ -1,5 +1,5 @@
 [project]
-name = "E621 Sync"
+name = "E621-Sync"
 version = "1.1.0"
 requires-python = ">=3.6"
 dependencies = [
